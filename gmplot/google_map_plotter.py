@@ -24,12 +24,10 @@ class GoogleAPIError(Exception):
     pass
 
 def _validate_lat_lng_length(lats, lngs):
-    if len(lats) != len(lngs):
-        raise ValueError("Number of latitudes and longitudes don't match!")
+    pass
 
 def _validate_num_points(name, items, num_points):
-    if len(items) != num_points:
-        raise ValueError("`%s`'%s length doesn't match the number of points!" % (name, 's' if name[-1] != 's' else ''))
+    pass
 
 class GoogleMapPlotter(object):
     '''
@@ -165,20 +163,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.from_geocode.png
         '''
-        apikey = _get(kwargs, 'apikey')
-
-        return cls(
-            *GoogleMapPlotter.geocode(location, apikey=apikey),
-            zoom=_get(kwargs, 'zoom', 13),
-            map_type=_get(kwargs, 'map_type'),
-            apikey=apikey,
-            title=_get(kwargs, 'title', 'Google Maps - gmplot'),
-            map_styles=_get(kwargs, 'map_styles'),
-            tilt=_get(kwargs, 'tilt'),
-            scale_control=_get(kwargs, 'scale_control', False),
-            fit_bounds=_get(kwargs, 'fit_bounds'),
-            precision=_get(kwargs, 'precision', 6)
-        )
+        pass
 
     @staticmethod
     def geocode(location, **kwargs):
@@ -212,20 +197,7 @@ class GoogleMapPlotter(object):
 
             -> (48.801408, 2.130122)
         '''
-        apikey = _get(kwargs, 'apikey')
-
-        response = json.loads(requests.get('''
-            https://maps.googleapis.com/maps/api/geocode/json?address="{location}"{key}
-        '''.format(
-            location=location,
-            key=('&key=%s' % apikey if apikey else '') # TODO: Avoid this duplication (see _write_html).
-        )).text)
-
-        if response.get('error_message', ''):
-            raise GoogleAPIError(response['error_message'])
-
-        latlng_dict = response['results'][0]['geometry']['location']
-        return latlng_dict['lat'], latlng_dict['lng']
+        pass
 
     def text(self, lat, lng, text, **kwargs):
         '''
@@ -256,14 +228,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.text.png
         '''
-        self._drawables.append(_Text(
-            lat,
-            lng,
-            text,
-            _get(kwargs, 'precision', 6),
-            color=_get(kwargs, ['color', 'c'], 'black'),
-            font_size=_get(kwargs, ['font_size'], '20')
-        ))
+        pass
 
     def grid(self, bounds, lat_increment, lng_increment, **kwargs):
         '''
@@ -295,15 +260,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.grid.png
         '''
-        self._drawables.append(_Grid(
-            bounds,
-            lat_increment,
-            lng_increment,
-            _get(kwargs, 'precision', 6),
-            color=_get(kwargs, ['color', 'c', 'edge_color', 'ec'], 'black'),
-            alpha=_get(kwargs, ['alpha', 'edge_alpha', 'ea'], 1.0),
-            width=_get(kwargs, ['edge_width', 'ew'], 1)
-        ))
+        pass
 
     def marker(self, lat, lng, **kwargs):
         '''
@@ -340,16 +297,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.marker.png
         '''
-        self._markers.append(_Marker(
-            lat,
-            lng,
-            _get(kwargs, ['color', 'c'], 'red'),
-            _get(kwargs, 'precision', 6),
-            title=_get(kwargs, 'title'),
-            label=_get(kwargs, 'label'),
-            info_window=_get(kwargs, 'info_window'),
-            draggable=_get(kwargs, 'draggable', False)
-        ))
+        pass
 
     def directions(self, origin, destination, **kwargs):
         '''
@@ -390,13 +338,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.directions.png
         '''
-        self._drawables.append(_Route(
-            origin,
-            destination,
-            _get(kwargs, 'precision', 6),
-            travel_mode=_get(kwargs, 'travel_mode', 'DRIVING'),
-            waypoints=_get(kwargs, 'waypoints')
-        ))
+        pass
 
     def scatter(self, lats, lngs, **kwargs):
         '''
@@ -460,66 +402,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.scatter.png
         '''
-        _validate_lat_lng_length(lats, lngs)
-
-        OPTION_MAP = {
-            'marker': ('marker', True),
-            'title': ('title',),
-            'label': ('label',),
-            'info_window': ('info_window',),
-            'draggable': ('draggable', False),
-            'symbol': ('symbol', 'o'),
-            'size': (['size', 's'], 40),
-            'edge_color': (['color', 'c', 'edge_color', 'ec'], 'black'),
-            'edge_alpha': (['alpha', 'edge_alpha', 'ea'], 1.0),
-            'edge_width': (['edge_width', 'ew'], 1),
-            'face_color': (['color', 'c', 'face_color', 'fc'], 'black'),
-            'face_alpha': (['alpha', 'face_alpha', 'fa'], 0.3),
-            'precision': ('precision', 6)
-        }
-
-        # Read each option as a list:
-        options = {}
-        for option, info in OPTION_MAP.items():
-            name, value = _get(kwargs, *info, get_key=True)
-            if value is None:
-                continue
-
-            if isinstance(value, (list, tuple)):
-                _validate_num_points(name, value, len(lats))
-                options[option] = value
-
-            else:
-                options[option] = [value] * len(lats)
-
-        # For each point, plot a marker or symbol with its corresponding options:
-        for i, location in enumerate(zip(lats, lngs)):
-            point_options = {option: value[i] for (option, value) in options.items()}
-
-            if point_options.get('marker'):
-                self._markers.append(_Marker(
-                    location[0],
-                    location[1],
-                    point_options.get('face_color'),
-                    point_options.get('precision'),
-                    title=point_options.get('title'),
-                    label=point_options.get('label'),
-                    info_window=point_options.get('info_window'),
-                    draggable=point_options.get('draggable')
-                ))
-            else:
-                self._drawables.append(_Symbol(
-                    location[0],
-                    location[1],
-                    point_options.get('symbol'),
-                    point_options.get('size'),
-                    point_options.get('precision'),
-                    edge_color=point_options.get('edge_color'),
-                    edge_alpha=point_options.get('edge_alpha'),
-                    edge_width=point_options.get('edge_width'),
-                    face_color=point_options.get('face_color'),
-                    face_alpha=point_options.get('face_alpha')
-                ))
+        pass
 
     def circle(self, lat, lng, radius, **kwargs):
         '''
@@ -557,17 +440,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.circle.png
         '''
-        self._drawables.append(_Circle(
-            lat,
-            lng,
-            radius,
-            _get(kwargs, 'precision', 6),
-            edge_color=_get(kwargs, ['color', 'c', 'edge_color', 'ec'], 'black'),
-            edge_alpha=_get(kwargs, ['alpha', 'edge_alpha', 'ea'], 1.0),
-            edge_width=_get(kwargs, ['edge_width', 'ew'], 1),
-            face_color=_get(kwargs, ['color', 'c', 'face_color', 'fc'], 'black'),
-            face_alpha=_get(kwargs, ['alpha', 'face_alpha', 'fa'], 0.5)
-        ))
+        pass
 
     def plot(self, lats, lngs, **kwargs):
         '''
@@ -606,16 +479,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.plot.png
         '''
-        _validate_lat_lng_length(lats, lngs)
-
-        self._drawables.append(_Polyline(
-            lats,
-            lngs,
-            _get(kwargs, 'precision', 6),
-            color=_get(kwargs, ['color', 'c', 'edge_color', 'ec'], 'black'),
-            alpha=_get(kwargs, ['alpha', 'edge_alpha', 'ea'], 1.0),
-            width=_get(kwargs, ['edge_width', 'ew'], 1),
-        ))
+        pass
 
     def heatmap(self, lats, lngs, **kwargs):
         '''
@@ -666,23 +530,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.heatmap.png
         '''
-        _validate_lat_lng_length(lats, lngs)
-
-        name, weights = _get(kwargs, 'weights', get_key=True)
-        if weights is not None:
-            _validate_num_points(name, weights, len(lats))
-
-        self._drawables.append(_Heatmap(
-            lats,
-            lngs,
-            _get(kwargs, 'precision', 6),
-            radius=_get(kwargs, 'radius', 10),
-            gradient=_get(kwargs, 'gradient'),
-            opacity=_get(kwargs, 'opacity', 0.6),
-            max_intensity=_get(kwargs, 'max_intensity', 1),
-            dissipating=_get(kwargs, 'dissipating', True),
-            weights=weights
-        ))
+        pass
 
     def ground_overlay(self, url, bounds, **kwargs):
         '''
@@ -712,11 +560,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.ground_overlay.png
         '''
-        self._drawables.append(_GroundOverlay(
-            url,
-            bounds,
-            opacity=_get(kwargs, 'opacity', 1.0)
-        ))
+        pass
 
     def polygon(self, lats, lngs, **kwargs):
         '''
@@ -762,18 +606,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.polygon.png
         '''
-        _validate_lat_lng_length(lats, lngs)
-        
-        self._drawables.append(_Polygon(
-            lats,
-            lngs,
-            _get(kwargs, 'precision', 6),
-            edge_color=_get(kwargs, ['color', 'c', 'edge_color', 'ec'], 'black'),
-            edge_alpha=_get(kwargs, ['alpha', 'edge_alpha', 'ea'], 1.0),
-            edge_width=_get(kwargs, ['edge_width', 'ew'], 1),
-            face_color=_get(kwargs, ['color', 'c', 'face_color', 'fc'], 'black'),
-            face_alpha=_get(kwargs, ['alpha', 'face_alpha', 'fa'], 0.3)
-        ))
+        pass
 
     def enable_marker_dropping(self, **kwargs):
         '''
@@ -804,12 +637,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.enable_marker_dropping.gif
         '''
-        self._marker_dropper = _MarkerDropper(
-            _get(kwargs, ['color', 'c'], 'red'),
-            title=_get(kwargs, 'title'),
-            label=_get(kwargs, 'label'),
-            draggable=_get(kwargs, 'draggable', False)
-        )
+        pass
 
     def draw(self, file, encoding="utf-8"):
         '''
@@ -827,8 +655,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter.draw.png
         '''
-        with open(file, 'w', encoding=encoding) as f:
-            self._write_html(f)
+        pass
 
     def get(self):
         '''

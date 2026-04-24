@@ -25,7 +25,7 @@ class _MarkerIcon(object):
 
     def get_name(self):
         '''Get the name of the marker icon.'''
-        return self._name
+        pass
     
     def write(self, w, context):
         '''
