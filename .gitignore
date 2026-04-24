@@ -15,3 +15,6 @@ _api
 _build
 _static
 _templates
+
+.aider*
+logs/
