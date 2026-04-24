@@ -175,12 +175,4 @@ def _get_hex_color(color):
     Raises:
         ValueError: If the color isn't supported.
     '''
-    if not re.match('^#[0-9a-fA-F]{6}$', color):
-        color = _MATPLOTLIB_COLOR_MAP.get(color, color)
-
-        if color not in _HTML_COLOR_CODES:
-            raise ValueError("Color '%s' isn't supported!" % color)
-
-        color = _HTML_COLOR_CODES[color]
-
-    return color.upper()
+    pass

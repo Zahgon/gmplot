@@ -23,16 +23,7 @@ class _Marker(object):
         .. _info window: https://developers.google.com/maps/documentation/javascript/infowindows
         .. _draggable: https://developers.google.com/maps/documentation/javascript/markers#draggable
         '''
-        self._marker_icon = _MarkerIcon(color)
-
-        info_window = kwargs.pop('info_window', None)
-        self._marker_info_window = _MarkerInfoWindow(info_window) if info_window is not None else None
-
-        self._raw_marker = _RawMarker(
-            _format_LatLng(lat, lng, precision),
-            self._marker_icon.get_name(),
-            **kwargs
-        ) 
+        pass
 
     def write(self, w, context):
         '''
@@ -42,16 +33,4 @@ class _Marker(object):
             w (_Writer): Writer used to write the marker.
             context (_Context): Context used to keep track of what was drawn to the map.
         '''
-        # Write the marker icon (if it isn't written already):
-        self._marker_icon.write(w, context)
-
-        # If this marker has no associated info window, just write the marker as is:
-        if self._marker_info_window is None:
-            self._raw_marker.write(w)
-
-        # Otherwise, write the marker with its info window:
-        else:
-            marker_name = ('info_marker_%d' % context.num_info_markers)
-            self._raw_marker.write(w, marker_name)
-            self._marker_info_window.write(w, context, marker_name)
-            context.num_info_markers += 1
+        pass

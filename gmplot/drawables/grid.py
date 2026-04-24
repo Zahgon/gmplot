@@ -19,28 +19,7 @@ class _Grid(object):
             alpha (float): Opacity of the grid, ranging from 0 to 1.
             width (int): Width of the grid lines, in pixels.
         '''
-        # Set up the bounding box:
-        self._bounding_box = _Polyline(*zip(*[
-            (bounds['south'], bounds['west']),
-            (bounds['north'], bounds['west']),
-            (bounds['north'], bounds['east']),
-            (bounds['south'], bounds['east']),
-            (bounds['south'], bounds['west'])
-        ]), precision=precision, **kwargs)
-
-        get_num_divisions = lambda start, end, increment: int(math.ceil((end - start) / increment))
-
-        # Set up the latitudinal divisions:
-        self._lat_divisions = []
-        for lat_index in range(1, get_num_divisions(bounds['south'], bounds['north'], lat_increment)):
-            lat = bounds['south'] + float(lat_index) * lat_increment
-            self._lat_divisions.append(_Polyline(*zip(*[(lat, bounds['west']), (lat, bounds['east'])]), precision=precision, **kwargs))
-
-        # Set up the longitudinal divisions:
-        self._lng_divisions = []
-        for lng_index in range(1, get_num_divisions(bounds['west'], bounds['east'], lng_increment)):
-            lng = bounds['west'] + float(lng_index) * lng_increment
-            self._lng_divisions.append(_Polyline(*zip(*[(bounds['south'], lng), (bounds['north'], lng)]), precision=precision, **kwargs))
+        pass
 
     def write(self, w):
         '''
@@ -49,7 +28,4 @@ class _Grid(object):
         Args:
             w (_Writer): Writer used to write the grid.
         '''
-        self._bounding_box.write(w)
-        [lat_division.write(w) for lat_division in self._lat_divisions]
-        [lng_division.write(w) for lng_division in self._lng_divisions]
-        w.write()
+        pass

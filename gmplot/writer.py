@@ -10,9 +10,7 @@ class _Writer(object):
         Args:
             file (handle): File to write to.
         '''
-        self._file = file
-        self._indent_level = 0
-        self._start_of_line = True
+        pass
 
     def __enter__(self):
         return self
@@ -30,17 +28,11 @@ class _Writer(object):
 
     def indent(self):
         '''Indent the writer by one level.'''
-        self._indent_level += 1
-        return self
+        pass
 
     def dedent(self):
         '''Dedent the writer by one level.'''
-        if self._indent_level > 0:
-            self._indent_level -= 1
-        else:
-            warnings.warn("Can't dedent further!")
-            
-        return self
+        pass
 
     def write(self, content='', end_in_newline=True):
         '''
@@ -56,28 +48,4 @@ class _Writer(object):
                 - All tabs are expanded to spaces.
             end_in_newline (bool): Whether or not to write a newline at the end. Defaults to True.
         '''
-        lines = inspect.cleandoc(content).splitlines()
-
-        # For each line of content...
-        for index, line in enumerate(lines):
-
-            # ...indent if the writer is at the start of a line:
-            if self._start_of_line:
-                self._file.write(_INDENT * self._indent_level)
-
-            # ...write the line:
-            self._file.write(line)
-
-            # ...write a newline if there's still more content:
-            if index < len(lines) - 1:
-                self._file.write('\n')
-                self._start_of_line = True
-
-        # If the content should end in a newline, write it:
-        if end_in_newline:
-            self._file.write('\n')
-            self._start_of_line = True
-        else:
-            self._start_of_line = False
-          
-        return self
+        pass

@@ -27,12 +27,7 @@ class _Symbol(object):
             face_color (str): Color of the symbol's face. Can be hex ('#00FFFF'), named ('cyan'), or matplotlib-like ('c').
             face_alpha (float): Opacity of the symbol's face, ranging from 0 to 1.
         '''
-        # Copy parameters for symbols without a face:
-        kwargs['color'] = kwargs.get('edge_color')
-        kwargs['alpha'] = kwargs.get('edge_alpha')
-        kwargs['width'] = kwargs.get('edge_width')
-
-        self._symbol = self._SHAPES[shape](lat, lng, size, precision, **kwargs)
+        pass
 
     def write(self, w):
         '''
@@ -41,4 +36,4 @@ class _Symbol(object):
         Args:
             w (_Writer): Writer used to write the symbol.
         '''
-        self._symbol.write(w)
+        pass

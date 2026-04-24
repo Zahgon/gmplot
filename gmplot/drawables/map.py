@@ -28,13 +28,7 @@ class _Map(object):
         .. _Tilt: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.tilt
         .. _scale control: https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions.scaleControl
         '''
-        self._center = _format_LatLng(lat, lng, precision)
-        self._zoom = zoom
-        self._map_type = kwargs.get('map_type')
-        self._map_styles = kwargs.get('map_styles')
-        self._tilt = kwargs.get('tilt')
-        self._scale_control = kwargs.get('scale_control')
-        self._fit_bounds = kwargs.get('fit_bounds')
+        pass
 
     def write(self, w):
         '''
@@ -43,17 +37,4 @@ class _Map(object):
         Args:
             w (_Writer): Writer used to write the map.
         '''
-        w.write('var map = new google.maps.Map(document.getElementById("map_canvas"), {')
-        w.indent()
-        if self._map_styles: w.write('styles: %s,' % json.dumps(self._map_styles, indent=_INDENT_LEVEL))
-        if self._map_type is not None: w.write('mapTypeId: "%s",' % self._map_type.lower())
-        if self._tilt is not None: w.write('tilt: %d,' % self._tilt)
-        if self._scale_control: w.write('scaleControl: true,')
-        w.write('zoom: %d,' % self._zoom)
-        w.write('center: %s' % self._center)
-        w.dedent()
-        w.write('});')
-        w.write()
-        if self._fit_bounds:
-            w.write('map.fitBounds(%s);' % json.dumps(self._fit_bounds))
-            w.write()
+        pass

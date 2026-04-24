@@ -16,10 +16,7 @@ class _Route(object):
             travel_mode (str): Travel mode.
             waypoints ([(float, float)]): Waypoints.
         '''
-        self._origin = _format_LatLng(*origin, precision=precision)
-        self._destination = _format_LatLng(*destination, precision=precision)
-        self._travel_mode = kwargs.get('travel_mode')
-        self._waypoints = [_format_LatLng(*waypoint, precision=precision) for waypoint in _get(kwargs, ['waypoints'], [])]
+        pass
 
     def write(self, w):
         '''
@@ -28,23 +25,4 @@ class _Route(object):
         Args:
             w (_Writer): Writer used to write the route.
         '''
-        w.write('new google.maps.DirectionsService().route({')
-        w.indent()
-        if self._travel_mode is not None: w.write('travelMode: "%s",' % self._travel_mode.upper())
-        w.write('origin: %s,' % self._origin)
-        w.write('destination: %s,' % self._destination)
-        if self._waypoints:
-            w.write('waypoints: [')
-            w.indent()
-            [w.write('{location: %s, stopover: false},' % waypoint) for waypoint in self._waypoints]
-            w.dedent()
-            w.write(']')
-        w.dedent()
-        w.write('''  
-            }, function(response, status) {
-                if (status == google.maps.DirectionsStatus.OK) {
-                    new google.maps.DirectionsRenderer({map: map}).setDirections(response);
-                }
-            });
-        ''')
-        w.write()
+        pass

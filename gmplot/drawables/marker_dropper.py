@@ -22,12 +22,7 @@ class _MarkerDropper(object):
             label (str): Label displayed on the markers to be dropped.
             draggable (bool): Whether or not the markers to be dropped are draggable.
         '''
-        self._marker_icon = _MarkerIcon(color)
-        self._marker = _RawMarker(
-            '%s.latLng' % self._EVENT_OBJECT_NAME,
-            self._marker_icon.get_name(),
-            **kwargs
-        )
+        pass
 
     def write(self, w, context):
         '''
@@ -37,18 +32,4 @@ class _MarkerDropper(object):
             w (_Writer): Writer used to write the marker dropper.
             context (_Context): Context used to keep track of what was drawn to the map.
         '''
-        # Write the marker icon (if it isn't written already):
-        self._marker_icon.write(w, context)
-
-        # Write the marker-dropping handler:
-        w.write('map.addListener("click", function(%s) {' % self._EVENT_OBJECT_NAME)
-        w.indent()
-        self._marker.write(w, self._MARKER_NAME)
-        w.write('''
-            {marker_name}.addListener('click', function() {{
-                {marker_name}.setMap(null);
-            }});
-        '''.format(marker_name=self._MARKER_NAME))
-        w.dedent()
-        w.write('});')
-        w.write()
+        pass

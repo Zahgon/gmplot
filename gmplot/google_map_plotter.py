@@ -99,24 +99,7 @@ class GoogleMapPlotter(object):
 
         .. image:: GoogleMapPlotter_Styled.png
         '''
-        self._apikey = _get(kwargs, 'apikey')
-        self._title = _get(kwargs, 'title', 'Google Maps - gmplot')
-
-        self._map = _Map(
-            lat,
-            lng,
-            zoom,
-            _get(kwargs, 'precision', 6),
-            map_type=_get(kwargs, 'map_type'),
-            map_styles=_get(kwargs, 'map_styles'),
-            tilt=_get(kwargs, 'tilt'),
-            scale_control=_get(kwargs, 'scale_control', False),
-            fit_bounds=_get(kwargs, 'fit_bounds')
-        )
-
-        self._drawables = []
-        self._markers = []
-        self._marker_dropper = None
+        pass
 
     @classmethod
     def from_geocode(cls, location, **kwargs):
@@ -694,9 +677,7 @@ class GoogleMapPlotter(object):
                </body>
                </html>
         '''
-        with StringIO() as f:
-            self._write_html(f)
-            return f.getvalue()
+        pass
 
     def _write_html(self, file):
         '''
@@ -705,36 +686,4 @@ class GoogleMapPlotter(object):
         Args:
             file (handle): File to write to.
         '''
-        with _Writer(file) as w:
-            context = _Context()
-
-            w.write('''
-                <html>
-                <head>
-                <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-                <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-                <title>{title}</title>
-                <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization{key}"></script>
-                <script type="text/javascript">
-            '''.format(
-                title=self._title,
-                key=('&key=%s' % self._apikey if self._apikey else '')
-            ))
-            w.indent()
-            w.write('function initialize() {')
-            w.indent()
-            self._map.write(w)
-            [drawable.write(w) for drawable in self._drawables]
-            [marker.write(w, context) for marker in self._markers]
-            if self._marker_dropper: self._marker_dropper.write(w, context)
-            w.dedent()
-            w.write('}')
-            w.dedent()
-            w.write('''
-                </script>
-                </head>
-                <body style="margin:0px; padding:0px;" onload="initialize()">
-                    <div id="map_canvas" style="width: 100%; height: 100%;" />
-                </body>
-                </html>
-            ''')
+        pass

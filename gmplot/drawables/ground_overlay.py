@@ -13,9 +13,7 @@ class _GroundOverlay(object):
         Args:
             opacity (float): Opacity of the overlay, ranging from 0 to 1.
         '''
-        self._url = url
-        self._bounds = bounds
-        self._opacity = kwargs.get('opacity')
+        pass
 
     def write(self, w):
         '''
@@ -24,17 +22,4 @@ class _GroundOverlay(object):
         Args:
             w (_Writer): Writer used to write the ground overlay.
         '''
-        w.write('new google.maps.GroundOverlay(')
-        w.indent()
-        w.write('"%s",' % self._url)
-        w.write('%s,' % json.dumps(self._bounds))
-        w.write('{')
-        w.indent()
-        if self._opacity is not None: w.write('opacity: %s,' % self._opacity)
-        w.write('map: map,')
-        w.write('clickable: false')
-        w.dedent()
-        w.write('}')
-        w.dedent()
-        w.write(');')
-        w.write()
+        pass

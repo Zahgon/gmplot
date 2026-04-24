@@ -54,11 +54,7 @@ def _get(dict, keys, default=None, get_key=False):
         any or (str, any): Value of the first valid key, or a tuple of the key and its value if ``get_key`` is True.
             If the default value is returned, the key is None.
     '''
-    for key in (keys if isinstance(keys, (list, tuple)) else [keys]):
-        value = dict.get(key)
-        if value is not None:
-            return value if not get_key else (key, value)
-    return default if not get_key else (None, default)
+    pass
 
 def _format_LatLng(lat, lng, precision):
     '''
@@ -72,7 +68,7 @@ def _format_LatLng(lat, lng, precision):
     Returns:
         str: Formatted Google Maps LatLng object.
     '''
-    return 'new google.maps.LatLng(%.*f, %.*f)' % (precision, lat, precision, lng)
+    pass
 
 def _get_embeddable_image(path):
     '''
@@ -84,8 +80,7 @@ def _get_embeddable_image(path):
     Returns:
         str: Base64 image URL that can be embedded in a file.
     '''
-    with open(path, 'rb') as f:
-        return 'data:image/png;base64,' + base64.b64encode(f.read()).decode()
+    pass
 
 def _get_fresh_path(relative_path):
     '''
@@ -129,10 +124,7 @@ class _GenerateDocFiles(object):
             doc_directory (str): Sphinx directory to create the source files in.
             sidebar_file (handle): GitHub Wiki _Sidebar file.
         '''
-        self.module = module
-        self.doc_directory = doc_directory
-        self.source_ext = '.rst'
-        self.sidebar_file = sidebar_file
+        pass
 
     def __call__(self):
         '''
